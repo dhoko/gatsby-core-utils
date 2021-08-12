@@ -1,3 +1,1 @@
-/// <reference types="node" />
-import Module from "module";
-export declare const createRequireFromPath: typeof Module.createRequire;
+export declare const createRequireFromPath: any;

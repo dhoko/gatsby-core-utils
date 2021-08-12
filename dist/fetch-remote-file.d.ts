@@ -1,5 +1,4 @@
-/// <reference types="node" />
-import { OutgoingHttpHeaders } from "http";
+import { OutgoingHttpHeaders, Agent } from "http";
 import { GatsbyCache } from "gatsby";
 export interface IFetchRemoteFileOptions {
     url: string;
@@ -8,8 +7,15 @@ export interface IFetchRemoteFileOptions {
         htaccess_pass?: string;
         htaccess_user?: string;
     };
+    httpOptions?: {
+        auth?: string;
+        agent?: {
+            http?: Agent;
+            https?: Agent;
+        };
+    };
     httpHeaders?: OutgoingHttpHeaders;
     ext?: string;
     name?: string;
 }
-export declare function fetchRemoteFile({ url, cache, auth, httpHeaders, ext, name, }: IFetchRemoteFileOptions): Promise<string>;
+export declare function fetchRemoteFile({ url, cache, auth, httpOptions, httpHeaders, ext, name, }: IFetchRemoteFileOptions): Promise<string>;

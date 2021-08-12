@@ -13,7 +13,7 @@ var _path = _interopRequireDefault(require("path"));
 
 var _fsExtra = _interopRequireDefault(require("fs-extra"));
 
-var _ = require(".");
+var _createContentDigest = require("./create-content-digest");
 
 var _filenameUtils = require("./filename-utils");
 
@@ -126,6 +126,7 @@ async function fetchRemoteFile({
   url,
   cache,
   auth = {},
+  httpOptions = {},
   httpHeaders = {},
   ext,
   name
@@ -143,14 +144,12 @@ async function fetchRemoteFile({
   // extensible. We should define a proper API that we validate.
 
 
-  const httpOpts = {};
-
   if (auth && (auth.htaccess_pass || auth.htaccess_user)) {
-    httpOpts.auth = `${auth.htaccess_user}:${auth.htaccess_pass}`;
+    httpOptions.auth = `${auth.htaccess_user}:${auth.htaccess_pass}`;
   } // Create the temp and permanent file names for the url.
 
 
-  const digest = (0, _.createContentDigest)(url);
+  const digest = (0, _createContentDigest.createContentDigest)(url);
 
   if (!name) {
     name = (0, _filenameUtils.getRemoteFileName)(url);
@@ -162,7 +161,7 @@ async function fetchRemoteFile({
 
   const tmpFilename = (0, _filenameUtils.createFilePath)(pluginCacheDir, `tmp-${digest}`, ext); // Fetch the file.
 
-  const response = await requestRemoteNode(url, headers, tmpFilename, httpOpts);
+  const response = await requestRemoteNode(url, headers, tmpFilename, httpOptions);
 
   if (response.statusCode === 200) {
     // Save the response headers for future requests.
